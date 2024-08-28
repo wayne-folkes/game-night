@@ -44,9 +44,9 @@ jobs:
       - run: pip install -r tests/requirements.txt
       - run: pytest
       - run: sam build
-      # - name:  deploy
-      #   run: |
-      #     sam deploy
+      - name:  deploy
+        run: |
+          sam deploy
 
 
 
