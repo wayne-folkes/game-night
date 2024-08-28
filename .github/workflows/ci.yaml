@@ -41,6 +41,7 @@ jobs:
           role-to-assume: arn:aws:iam::${{vars.AWS_ACCOUNT_ID}}:role/gha-deploy-game-night
           role-session-name: github-actions
           aws-region: us-east-1
+      - run: pip install -r tests/requirements.txt
       - run: pytest
       - run: sam build
       # - name:  deploy
