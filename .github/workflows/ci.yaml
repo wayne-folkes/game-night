@@ -1,0 +1,50 @@
+name: Edge Log Forwader AWS Deploy
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "README.md"
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: write # This is required for actions/checkout
+defaults:
+  run:
+    shell: 'script -q -e -c "bash --noprofile --norc -eo pipefail {0}"' # force color output
+
+env:
+  AWS_REGION : "us-east-1"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: default
+    concurrency:
+      group: deploy-${{ github.workflow }}-${{ github.event.pull_request.number }}
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          check-latest: true
+      - name: Get AWS SAM
+        uses: aws-actions/setup-sam@v2
+      - name: Get AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{vars.AWS_ACCOUNT_ID}}:role/gha-deploy-game-night
+          role-session-name: github-actions
+          aws-region: us-east-1
+      - run: sam build
+      # - name:  deploy
+      #   run: |
+      #     sam deploy
+
+
+
