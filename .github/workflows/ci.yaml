@@ -1,4 +1,4 @@
-name: Edge Log Forwader AWS Deploy
+name: Game Night API Deploy
 on:
   push:
     branches:
