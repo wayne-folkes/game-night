@@ -56,3 +56,6 @@ Outputs:
     Description: Hello World Lambda Function ARN
     Value: !GetAtt GameNightFunction.Arn
 
+  ZoneNameServers:
+    Description: Name servers for the hosted zone
+    Value: !GetAtt Zone.NameServers
